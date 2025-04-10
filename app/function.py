@@ -43,7 +43,7 @@ def save_to_csv(data, origin=None):
 
             date = datetime.today().strftime("%Y-%m-%d")
             path = f"{file}{filename}_{date}.csv"
-            data.to_csv(path, index=False, encoding="utf-8")  
-            print(f"✅ Datos guardados en {path}")
+            data.to_csv(path, index=False, quotechar='"')  
+            print(f"Datos guardados en {path}")
       except Exception as e:
-            print(f"❌ Error al guardar el archivo CSV: {str(e)}")
+            print(f"Error al guardar el archivo CSV: {str(e)}")

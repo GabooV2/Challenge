@@ -1,6 +1,7 @@
 import hashlib
 from datetime import datetime, timezone
 import re
+import unicodedata
 
 def clean_text(text):
     """
@@ -8,8 +9,20 @@ def clean_text(text):
     """
     if not isinstance(text, str):
         return ""
-    text = text.replace('\n', ' ').replace('\r', '')
-    return re.sub(r'\s+', ' ', text.strip())
+    
+    # Normaliza caracteres unicode (quita tildes, comillas tipográficas, etc.)
+    text = unicodedata.normalize("NFKD", text)
+    
+    # Elimina comillas simples, dobles y tipográficas
+    text = re.sub(r"^['\"“”‘’]+|['\"“”‘’]+$", '', text)
+
+    # Reemplaza saltos de línea y tabulaciones por espacio
+    text = text.replace('\n', ' ').replace('\r', '').replace('\t', ' ')
+    
+    # Reemplaza múltiples espacios por uno solo
+    text = re.sub(r'\s+', ' ', text).strip()
+
+    return text
 
 def generate_id(row):
     """
